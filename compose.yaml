@@ -1,0 +1,41 @@
+
+services:
+  fastapi:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      ms-express:
+        condition: service_healthy
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  ms-express:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Apocalypse117
+      - MSSQL_PID=Express
+    ports:
+      - "1435:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Apocalypse117 -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mssql-data:

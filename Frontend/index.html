@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Iniciar Sesión</h1>
+                <p>Ingresa tus credenciales para continuar</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Ingresa tu usuario"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Ingresa tu contraseña"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="login-btn">
+                        <span class="btn-text">Iniciar Sesión</span>
+                        <span class="btn-loading" style="display: none;">
+                            <div class="spinner"></div>
+                            Verificando...
+                        </span>
+                    </button>
+                </div>
+            </form>
+            
+            <div id="message" class="message" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <script src="scripts.js"></script>
+</body>
+</html>
