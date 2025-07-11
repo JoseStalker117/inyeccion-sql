@@ -108,7 +108,7 @@ async def login(login_data: LoginRequest):
         
         # Query to check user credentials in USUARIOS table
         query = """
-        SELECT id, username 
+        SELECT *
         FROM USUARIOS 
         WHERE username = ? AND password = ?
         """
