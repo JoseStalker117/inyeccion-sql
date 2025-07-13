@@ -106,14 +106,14 @@ async def login(login_data: LoginRequest):
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Query to check user credentials in USUARIOS table
-        query = """
+        # Query vulnerable a inyección SQL (NO USAR EN PRODUCCIÓN)
+        query = f"""
         SELECT *
         FROM USUARIOS 
-        WHERE username = ? AND password = ?
+        WHERE username = '{login_data.username}' AND password = '{login_data.password}'
         """
         
-        cursor.execute(query, (login_data.username, login_data.password))
+        cursor.execute(query)
         user = cursor.fetchone()
         
         conn.close()
