@@ -5,20 +5,9 @@ services:
       context: .
     # image: miapi:1.0.0
     ports:
-      - "8000:8000"
-    # depends_on:
-    #   ms-express:
-    #     condition: service_healthy
-    # environment:
-    #   - PYTHONUNBUFFERED=1
+      - "8000:8000"  
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     restart: unless-stopped
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:8000/"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3  
-    #   start_period: 40s
 
   ms-express:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -32,23 +21,15 @@ services:
     volumes:
       - mssql-data:/var/opt/mssql
       - ./database-users.sql:/database-users.sql
-    # healthcheck:
-    #   test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Apocalypse117 -Q 'SELECT 1' || exit 1"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
-    #   start_period: 30s
 
-  # db-init:
-  #   image: mcr.microsoft.com/mssql-tools
-  #   # depends_on:
-  #   #   ms-express:
-  #   #     condition: service_healthy
-  #   volumes:
-  #     - ./database-users.sql:/database-users.sql
-  #   entrypoint: ["/bin/bash", "-c"]
-  #   command:
-  #     - /opt/mssql-tools/bin/sqlcmd -S ms-express -U sa -P Apocalypse117 -i /database-users.sql
+  db-init:
+    image: mcr.microsoft.com/mssql-tools
+    volumes:
+      - ./database-users.sql:/database-users.sql
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - /opt/mssql-tools/bin/sqlcmd -S ms-express -U sa -P Apocalypse117 -i /database-users.sql
+    restart: "no"
 
 volumes:
   mssql-data:
